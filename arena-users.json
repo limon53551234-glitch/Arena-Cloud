@@ -1,7 +1,7 @@
 {
   "version": 1,
   "updatedAt": 0,
-  "users": [],
-  "bans": [],
-  "verified": []
+  "users": [1],
+  "bans": [0],
+  "verified": [1]
 }
