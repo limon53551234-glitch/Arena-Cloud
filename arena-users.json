@@ -1,19 +1,27 @@
 {
   "version": 1,
-  "updatedAt": 1789327470799,
+  "updatedAt": 1789328279754,
   "users": [
     {
       "id": "255268844695",
       "name": "Limonad042",
       "pw": "fce8089ad261cdd03240de966252ca1e52c808ee8739f541aa1882904e1e5d84",
       "at": 1789327470799
+    },
+    {
+      "id": "123033834332",
+      "name": "Limonad2.0",
+      "pw": "e1cef02f7672546b91bc86f7a5f8e88e9c2b8045e0114bc1bb0ed5bf4bec1749",
+      "at": 1789328279754
     }
   ],
   "bans": [],
-  "verified": [ {
+  "verified": [
+    {
       "id": "255268844695",
       "name": "Limonad042",
       "pw": "fce8089ad261cdd03240de966252ca1e52c808ee8739f541aa1882904e1e5d84",
       "at": 1789327470799
-    }]
+    }
+  ]
 }
