@@ -10,5 +10,10 @@
     }
   ],
   "bans": [],
-  "verified": []
+  "verified": [ {
+      "id": "255268844695",
+      "name": "Limonad042",
+      "pw": "fce8089ad261cdd03240de966252ca1e52c808ee8739f541aa1882904e1e5d84",
+      "at": 1789327470799
+    }]
 }
