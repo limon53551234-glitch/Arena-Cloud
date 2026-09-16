@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1789565318531,
+  "updatedAt": 1789565418692,
   "users": [
     {
       "id": "255268844695",
@@ -13,10 +13,17 @@
       "name": "Limonad2.0",
       "pw": "e1cef02f7672546b91bc86f7a5f8e88e9c2b8045e0114bc1bb0ed5bf4bec1749",
       "at": 1789328279754
+    },
+    {
+      "id": "541054928938",
+      "name": "Limonad55355",
+      "pw": "ba6ba601577c5abaa8e35f7f5a063928a98c3aac41fc75c9a7c7987a78fa2052",
+      "at": 1789565418692
     }
   ],
   "bans": [
     "123033834332"
   ],
-  "verified": []
+  "verified": [],
+  "guard": []
 }
