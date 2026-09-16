@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1789394253260,
+  "updatedAt": 1789565318531,
   "users": [
     {
       "id": "255268844695",
@@ -15,20 +15,8 @@
       "at": 1789328279754
     }
   ],
-  "bans": [],
-  "verified": [
+  "bans": [
     "123033834332"
   ],
-  "guard": [
-    {
-      "id": "468162451657",
-      "since": 1789394040170,
-      "recHash": "39d73953e06e04a1f12056b2dd938b04265f3d468e279ccfa4cbb9c7fe6df71a"
-    },
-    {
-      "id": "123033834332",
-      "since": 1789394253260,
-      "recHash": "9a10df02b33256f8d5be8d8a7ca0d43f907930be12aea7c99a7c9db6a122137c"
-    }
-  ]
+  "verified": []
 }
