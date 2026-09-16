@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1789565663698,
+  "updatedAt": 1789565765848,
   "users": [
     {
       "id": "255268844695",
@@ -27,11 +27,5 @@
   "verified": [
     "255268844695"
   ],
-  "guard": [
-    {
-      "id": "255268844695",
-      "since": 1789565663698,
-      "recHash": "ec03fbf0e446d1af7a7e377fd18b16a78b91d1520fa184ca527547ac0dc5ff3d"
-    }
-  ]
+  "guard": []
 }
