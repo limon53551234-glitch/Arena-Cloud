@@ -1,7 +1,15 @@
 {
   "version": 1,
-  "updatedAt": 1789643059680,
-  "users": [],
+  "updatedAt": 1789660857577,
+  "users": [
+    {
+      "id": "Admin1214",
+      "name": "GG",
+      "pw": "",
+      "at": 1789660857577
+    }
+  ],
   "bans": [],
-  "verified": []
+  "verified": [],
+  "guard": []
 }
