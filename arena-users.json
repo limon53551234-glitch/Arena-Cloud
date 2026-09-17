@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1789662781252,
+  "updatedAt": 1789662920371,
   "users": [
     {
       "id": "Admin1214",
@@ -24,8 +24,6 @@
   "bans": [
     "865347077965"
   ],
-  "verified": [
-    "421753204320"
-  ],
+  "verified": [],
   "guard": []
 }
