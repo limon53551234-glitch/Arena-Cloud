@@ -436,25 +436,6 @@
   .grdring span{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
     font-size:13px; font-weight:700; }
 
-  /* ===== 🌐 социальная сеть (лента в общем реестре) ===== */
-  .postrow{ background:var(--card2); border:1px solid var(--line); border-radius:14px;
-    padding:11px 12px; margin-top:8px; }
-  .posthead{ display:flex; align-items:center; gap:9px; }
-  .posthead .ava2{ width:32px; height:32px; border-radius:11px; display:flex; align-items:center;
-    justify-content:center; font-weight:800; font-size:13px; flex:0 0 32px;
-    background:linear-gradient(135deg,rgba(0,210,255,.22),rgba(124,77,255,.22));
-    border:1px solid rgba(0,210,255,.3); }
-  .posthead .pnm{ font-weight:700; font-size:13px; }
-  .posthead .pid{ font-size:10.5px; color:var(--muted); font-family:ui-monospace,Menlo,monospace; }
-  .posthead .ptime{ margin-left:auto; font-size:10.5px; color:var(--muted); white-space:nowrap; }
-  .posttxt{ margin-top:8px; font-size:13.5px; line-height:1.5; white-space:pre-wrap; overflow-wrap:anywhere; }
-  .postbar{ display:flex; align-items:center; gap:8px; margin-top:9px; }
-  .likebtn{ border:none; cursor:pointer; border-radius:99px; padding:5px 11px; font-size:11.5px;
-    font-weight:700; background:rgba(255,93,108,.14); color:#ff9aa6; }
-  .likebtn.on{ background:rgba(255,93,108,.28); color:#ffc2ca; }
-  .postbar small{ font-size:10.5px; color:var(--muted); }
-  .postbar .del{ margin-left:auto; border:none; cursor:pointer; background:none;
-    color:var(--muted); font-size:11px; text-decoration:underline; }
 </style>
 </head>
 <body>
@@ -870,11 +851,20 @@
         <div class="subttl" style="margin-top:0">🌐 Общий реестр в GitHub</div>
         <p class="desc" style="margin-top:6px">Никакого сервера: страница сама читает и правит файл <span class="ext-badge">arena-users.json</span> прямо в твоём репозитории через GitHub API. Впиши репозиторий и токен — и по одному ID можно будет войти с любого устройства.</p>
         <div class="netline" id="netLine2" style="margin-top:8px"></div>
+        <div class="expchip ok hidden" id="regState" style="margin-top:8px"></div>
+        <button class="btn small hidden" id="btnRegPush" style="margin-top:8px">🌐 Перенести мой аккаунт в реестр</button>
         <label class="lbl" style="margin-top:10px" for="ghOwnerIn">Владелец (твой ник на GitHub)</label>
         <input type="text" id="ghOwnerIn" placeholder="ivan-petrov" autocomplete="off">
         <div style="height:8px"></div>
         <label class="lbl" for="ghRepoIn">Репозиторий</label>
         <input type="text" id="ghRepoIn" placeholder="arena-cloud" autocomplete="off">
+        <div style="height:8px"></div>
+        <label class="lbl" for="ghPathIn">Файл реестра в репозитории</label>
+        <input type="text" id="ghPathIn" placeholder="arena-users.json" autocomplete="off">
+        <div class="pwhint">Если в репозитории файл называется иначе — впиши его имя, иначе страница будет искать старый файл и не найдёт его.</div>
+        <div style="height:8px"></div>
+        <label class="lbl" for="ghBranchIn">Ветка</label>
+        <input type="text" id="ghBranchIn" placeholder="main" autocomplete="off">
         <div style="height:8px"></div>
         <label class="lbl" for="ghTokenIn">Токен — необязательно (Contents: Read and write)</label>
         <div class="pwfield">
@@ -886,6 +876,9 @@
           <button class="btn ghost small" id="btnGhOff">Отключить</button>
         </div>
         <div class="expchip ok hidden" id="apiDone"></div>
+        <div style="height:8px"></div>
+        <button class="btn ghost small" id="btnGhCheck">🩺 Проверить подключение</button>
+        <div class="desc hidden" id="ghCheckOut" style="margin-top:8px;white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:11.5px"></div>
         <p class="desc" style="margin-top:8px;font-size:11.5px">Токен хранится только в этом браузере и никуда не уходит, кроме api.github.com. Создаётся в GitHub → Settings → Developer settings → Fine-grained tokens.</p>
         <p class="desc" style="margin-top:8px;font-size:11.5px">Подключение общее для всех: один реестр — один аккаунт на все устройства. Список зарегистрированных показывается только администратору.</p>
         <!-- список «кто в реестре» — только для администратора -->
@@ -1056,32 +1049,6 @@
     </section>
 
 
-    <!-- 🌐 СОЦИАЛЬНАЯ СЕТЬ -->
-    <section class="screen" id="scr-feed">
-      <div class="card">
-        <div class="subttl" style="margin-top:0">🌐 Лента</div>
-        <p class="desc">Общая стена для всех, кто подключён к одному реестру. Работает по тому же принципу, что и аккаунты: <b>сервера нет</b> — записи лежат прямо в файле <span class="ext-badge">arena-users.json</span> в репозитории, страница сама их читает и сама коммитит новые. Поэтому ленту видят все, кто подключил этот же репозиторий.</p>
-        <div class="netline" id="netLine3" style="margin-top:8px"></div>
-        <div class="expchip ok hidden" id="feedHint"></div>
-      </div>
-
-      <div class="card">
-        <div class="subttl" style="margin-top:0">✍️ Новая запись</div>
-        <textarea id="postText" class="tarea" rows="4" maxlength="500" placeholder="Что нового? Запись увидят все, кто подключён к этому реестрию…"></textarea>
-        <div class="counter" id="postCount">0 / 500</div>
-        <div style="height:8px"></div>
-        <button class="btn" id="btnPost">📣 Опубликовать</button>
-        <p class="desc" style="margin-top:6px;font-size:12px">Под записью будет твоё имя, ID и галочка, если она выдана. Одна запись в минуту — чтобы файл не разрастался.</p>
-      </div>
-
-      <div class="card">
-        <div class="row2">
-          <div class="subttl" style="margin-top:0">📰 Записи (<span id="feedCount">0</span>)</div>
-          <button class="btn ghost small" id="btnFeedRefresh">🔄 Обновить</button>
-        </div>
-        <div id="feedList"></div>
-      </div>
-    </section>
   </main>
 
   <div class="paysheet" id="quotaSheet">
@@ -1215,7 +1182,6 @@
     <button data-tab="create" class="on"><span>📦</span>Создать</button>
     <button data-tab="open"><span>🔓</span>Открыть</button>
     <button data-tab="text"><span>🔤</span>Текст</button>
-    <button data-tab="feed"><span>🌐</span>Лента</button>
     <button data-tab="profile"><span>👤</span>Профиль</button>
   </nav>
 </div>
@@ -1674,7 +1640,8 @@ function enterApp(){
   $("meChipName").textContent="🪪 "+fmtId(user.id);
   $("profName").textContent=user.name;
   if(typeof renderXfer==="function") renderXfer();
-  if(typeof renderFeed==="function") renderFeed();
+  if(typeof renderRegState==="function") renderRegState();
+  if(typeof syncMyRegState==="function") syncMyRegState();
   if(typeof renderGuard==="function") renderGuard();
   $("myId").textContent=fmtId(user.id);
   $("editName").value=user.name;
@@ -1849,7 +1816,7 @@ async function ghWrite(data,sha,message){
   }
   return res.json();
 }
-function emptyReg(){ return {version:1,updatedAt:0,users:[],bans:[],verified:[],posts:[],likes:[]}; }
+function emptyReg(){ return {version:1,updatedAt:0,users:[],bans:[],verified:[]}; }
 function normReg(d){
   return {
     version:d&&d.version?d.version:1,
@@ -1857,26 +1824,31 @@ function normReg(d){
     users:Array.isArray(d&&d.users)?d.users:[],
     bans:Array.isArray(d&&d.bans)?d.bans:[],
     verified:Array.isArray(d&&d.verified)?d.verified:[],
-    posts:normPosts(d),                 // 🌐 лента социальной сети
-    likes:normLikes(d),                 // ❤️ лайки: [idЗаписи, idКто]
     /* guard: [{id,since,recHash}] — у каких ID включена защита входа */
     guard:Array.isArray(d&&d.guard)?d.guard.filter(x=>x&&x.id):[],
   };
 }
 /* --- реестр: регистрация, вход, список --- */
 async function regAdd(name,id,h){
-  const {data,sha}=await ghRead();
-  if(data.users.some(u=>u.id===id)) throw new Error("busy");      // такой ID уже есть
-  data.users.push({id,name,pw:h,at:Date.now()});
-  data.updatedAt=Date.now();
-  try{ await ghWrite(data,sha,"👤 Новый пользователь "+id); }
-  catch(e){
-    if(e.message==="notoken") throw new Error(
-      "Для записи в общий реестр нужен токен — он есть у владельца сайта. "+
-      "Попроси его добавить тебя или продолжай без подключения: аккаунт будет локальным.");
-    throw e;
+  /* две попытки: файл реестра общий, и кто-то мог закоммитить его
+     между нашим чтением и записью — тогда GitHub отвечает 409 */
+  for(let attempt=1;attempt<=2;attempt++){
+    const {data,sha}=await ghRead();
+    if(data.users.some(u=>u.id===id)) throw new Error("busy");    // такой ID уже есть
+    data.users.push({id,name,pw:h,at:Date.now()});
+    data.updatedAt=Date.now();
+    try{
+      await ghWrite(data,sha,"👤 Новый пользователь "+id);
+      return data.users.length;
+    }catch(e){
+      if(e.message==="notoken") throw new Error(
+        "Для записи в общий реестр нужен токен — он есть у владельца сайта. "+
+        "Попроси его добавить тебя или продолжай без подключения: аккаунт будет локальным.");
+      if(/одновременно/.test(e.message)&&attempt===1) continue;   // перечитаем и попробуем снова
+      throw new Error(e.message+" (файл "+ghCfg().path+", ветка "+ghCfg().branch+")");
+    }
   }
-  return data.users.length;
+  throw new Error("Не удалось записать пользователя");
 }
 async function regLogin(id,h){
   const {data}=await ghRead();
@@ -2186,7 +2158,7 @@ function paintNetLine(){
   const txt=ghReady()
     ? ("реестр: github.com/"+c.owner+"/"+c.repo+"/"+c.path+(ghCanWrite()?"":" · только чтение"))
     : "репозиторий не подключён — аккаунты локальные";
-  ["netLine","netLine2","netLine3"].forEach(id=>{
+  ["netLine","netLine2"].forEach(id=>{
     const box=$(id); if(!box) return;
     box.innerHTML='<span class="netdot" id="netDot"></span>'+txt;
   });
@@ -2217,20 +2189,37 @@ $("btnReg").onclick=async()=>{
       try{ await api("/api/user?id="+id); id=genId(); }   // 404 = свободно
       catch(e){ break; }
     }
-    const h=await pwHash(id,pw);
-    let online=false;
+    let h=await pwHash(id,pw);
+    let online=false, regErr="";
+    if(!ghReady()){
+      regErr="Репозиторий не подключён — аккаунт создан только на этом устройстве. "+
+             "Подключи реестр в профиле, и я перенесу аккаунт туда.";
+    }else if(!ghCanWrite()){
+      regErr="Репозиторий подключён без токена, а GitHub не принимает коммиты анонимно — "+
+             "аккаунт пока только на этом устройстве. Добавь токен в профиле и нажми «🌐 Перенести в реестр».";
+    }
     try{
       const r=await api("/api/register",{name,id,pw:h});
-      online=true;
+      online=true; regErr="";
       toast("🌐 Аккаунт записан в общий реестр — по этому ID теперь войдёшь с любого устройства",3600);
       if(r&&r.total) console.log("в реестре пользователей:",r.total);
     }catch(e){
-      if(e.message!=="offline") toast("😢 "+e.message,3600);
+      if(e.message==="busy"){
+        /* такой ID уже занят — берём следующий и пересчитываем хэш под него */
+        id=genId(); h=await pwHash(id,pw);
+        try{ await api("/api/register",{name,id,pw:h}); online=true; regErr=""; }
+        catch(e2){ regErr=e2.message; if(regErr!=="offline") toast("😢 "+regErr,4200); }
+      }else{
+        regErr=e.message;
+        if(regErr!=="offline") toast("😢 "+regErr,4200);
+        else if(!regErr) regErr="Репозиторий недоступен — аккаунт создан на этом устройстве.";
+      }
     }
     saveLocalPw(id,h);
     user={name,id,createdAt:Date.now(),pw:h,online,phone:fmtPhone(phone)};
     saveUser(); enterApp();
-    toast("Аккаунт создан! Твой ID: "+fmtId(user.id)+" 🎉",3000);
+    if(regErr) setTimeout(()=>toast("⚠️ "+regErr,6500),900);
+    else toast("Аккаунт создан! Твой ID: "+fmtId(user.id)+" 🎉",3000);
   }catch(err){
     toast("😢 "+err.message,3600);
   }finally{
@@ -2328,7 +2317,7 @@ $("btnCopyMy").onclick=()=>copyText(user.id,"Твой ID скопирован �
 $("btnShareId").onclick=()=>copyText(
   "Мой ID в Arena Cloud: "+fmtId(user.id)+" ☁️\nПришли мне посылку .acloud — открою её на сайте!",
   "Текст скопирован — отправь другу 💌");
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{ expireNow(true); renderShop(); applyPlanLimits(); if(b.dataset.tab==="feed") renderFeed(); showScreen(b.dataset.tab); });
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{ expireNow(true); renderShop(); applyPlanLimits(); showScreen(b.dataset.tab); });
 $("btnWhatsNew").onclick=()=>{
   $("whatsNew").classList.add("hidden");
   localStorage.setItem("ac_whatsnew_v4","1");
@@ -4095,7 +4084,45 @@ $("btnGrdOff").onclick=async()=>{
   await renderGuard();
   toast("🔓 Защита входа отключена");
 };
-/* показать текущее состояние передачи при входе в профиль */
+/* ---------- состояние аккаунта в общем реестре ---------- */
+function renderRegState(){
+  const el=$("regState"); if(!el||!user) return;
+  const inReg=user.online===true;
+  el.className="expchip "+(inReg?"ok":"fire");
+  el.classList.remove("hidden");
+  el.innerHTML=inReg
+    ? "🌐 Аккаунт лежит в общем реестре — по этому ID можно войти с любого устройства."
+    : "⚠️ Аккаунт пока только на этом устройстве: в общем реестре его нет. "+
+      "Подключи репозиторий с токеном и нажми кнопку ниже — перенесу.";
+  $("btnRegPush").classList.toggle("hidden",inReg);
+}
+/* аккаунт может уже лежать в реестре, а метка online — не стоять (например,
+   регистрация прошла, но страницу закрыли). Проверяем и чиним метку сами. */
+async function syncMyRegState(){
+  if(!user||user.online===true||!ghReady()) return;
+  try{
+    const {data}=await ghRead();
+    if(data.users.some(u=>normId(u.id)===normId(user.id))){
+      user.online=true; saveUser(); renderRegState();
+    }
+  }catch(e){}
+}
+/* доложить текущий аккаунт в общий реестр (если его там ещё нет) */
+async function pushMeToRegistry(){
+  if(!user){ toast("Сначала войди в аккаунт 👤"); return; }
+  if(!ghCanWrite()){ toast("Нужен подключённый репозиторий с токеном 🔑",4200); return; }
+  try{
+    const {data}=await ghRead();
+    if(data.users.some(u=>u.id===normId(user.id))){
+      user.online=true; saveUser(); renderRegState();
+      toast("🌐 Аккаунт уже в реестре"); return;
+    }
+    await regAdd(user.name,normId(user.id),user.pw||"");
+    user.online=true; saveUser(); renderRegState(); paintNetLine();
+    toast("🌐 Готово — аккаунт перенесён в общий реестр",4200);
+  }catch(e){ toast("😢 "+e.message,4200); }
+}
+/* показать текущее состояние передачи при входе в профиле */
 function renderXfer(){
   const x=loadXfer(), el=$("xfrMsg"); if(!el) return;
   if(x&&x.toId){
@@ -4511,11 +4538,15 @@ function fillGhForm(){
   $("ghOwnerIn").value=c.owner||((g&&g.owner)||"");
   $("ghRepoIn").value=c.repo||((g&&g.repo)||"");
   $("ghTokenIn").value=c.token;
+  if($("ghPathIn")) $("ghPathIn").value=c.path;
+  if($("ghBranchIn")) $("ghBranchIn").value=c.branch;
 }
 $("btnSaveApi").onclick=async()=>{
   const owner=$("ghOwnerIn").value.trim().replace(/^@/,"");
   const repo=$("ghRepoIn").value.trim().replace(/\.git$/,"");
   const token=$("ghTokenIn").value.trim();
+  const path=($('ghPathIn')?$("ghPathIn").value.trim():"")||"arena-users.json";
+  const branch=($('ghBranchIn')?$("ghBranchIn").value.trim():"")||"main";
   const el=$("apiDone");
   if(!owner||!repo){
     el.classList.remove("hidden"); el.className="expchip fire";
@@ -4526,6 +4557,8 @@ $("btnSaveApi").onclick=async()=>{
      Без токена доступны вход и список — но не запись в реестр. */
   localStorage.setItem("ac_gh_owner",owner);
   localStorage.setItem("ac_gh_repo",repo);
+  localStorage.setItem("ac_gh_path",path);
+  localStorage.setItem("ac_gh_branch",branch);
   if(token) localStorage.setItem("ac_gh_token",token);
   else localStorage.removeItem("ac_gh_token");
   el.classList.remove("hidden"); el.className="expchip";
@@ -4544,7 +4577,7 @@ $("btnSaveApi").onclick=async()=>{
       await ghWrite(emptyReg(),null,"🎉 Создан общий реестр Arena Cloud");
       el.textContent="✅ Файла не было — создал пустой реестр. Готово!";
     }else{
-      el.textContent="✅ Подключено · в реестре "+data.users.length+" чел."
+      el.textContent="✅ Подключено · "+path+" ("+branch+") · в реестре "+data.users.length+" чел."
         +(token?"":" · только чтение — для записи нужен токен");
     }
     el.className="expchip ok";
@@ -4552,7 +4585,7 @@ $("btnSaveApi").onclick=async()=>{
     toast("🌐 Общий реестр подключён");
   }catch(e){
     el.className="expchip fire";
-    el.textContent="😢 "+e.message;
+    el.textContent="😢 "+path+" ("+branch+"): "+e.message;
     localStorage.removeItem("ac_gh_owner");
     localStorage.removeItem("ac_gh_repo");
     localStorage.removeItem("ac_gh_token");
@@ -4617,6 +4650,45 @@ async function renderRegistry(){
   }
 }
 $("btnRefreshReg").onclick=()=>{ pingServer(); renderRegistry(); };
+$("btnRegPush").onclick=()=>pushMeToRegistry();
+/* 🩺 пошаговая проверка: показываем, какой файл ищем, что в нём лежит
+   и проходит ли запись. Без этого «не добавляется в реестр» не разобрать. */
+async function selfCheckRegistry(){
+  const out=$("ghCheckOut"); if(!out) return [];
+  const c=ghCfg();
+  const L=[];
+  const say=(t,ok)=>{ L.push(t); out.classList.remove("hidden"); out.textContent=L.join("\n");
+    if(ok!==undefined){ out.style.color=ok?"":"#ff8a8a"; } };
+  out.style.color="";
+  say("🩺 Проверяю общий реестр");
+  say("1) Владелец: "+(c.owner||"—")+" · Репозиторий: "+(c.repo||"—"));
+  say("2) Ищу файл: "+c.path+" · ветка "+c.branch);
+  if(!c.owner||!c.repo){ say("😢 Репозиторий не подключён — заполни поля выше и нажми «💾 Подключить».",false); return L; }
+  let data=null, sha=null;
+  try{
+    const r=await ghRead(); data=r.data; sha=r.sha;
+    if(!sha) say("3) ⚠️ Файла "+c.path+" в ветке "+c.branch+" нет — GitHub ответил 404. "+
+                 "Проверь имя файла и ветку: скорее всего страница ищет не тот файл.");
+    else say("3) ✅ Файл найден · users: "+data.users.length+" · verified: "+data.verified.length+
+             " · bans: "+data.bans.length+" · guard: "+data.guard.length+" · sha "+String(sha).slice(0,8));
+  }catch(e){ say("3) 😢 Прочитать не вышло: "+e.message,false); return L; }
+  say("4) Токен: "+(c.token?("есть ("+c.token.slice(0,12)+"…)"):"НЕТ"));
+  if(!c.token){ say("😢 Без токена GitHub не принимает коммиты — аккаунт остаётся на устройстве.",false); return L; }
+  try{
+    data.updatedAt=Date.now();
+    await ghWrite(data,sha,"🩺 Проверка записи Arena Cloud");
+    say("5) ✅ Запись в репозиторий проходит — регистрация должна работать.");
+  }catch(e){
+    say("5) 😢 Записать не вышло: "+e.message,false);
+    say("   Чаще всего это права токена: нужен Contents → Read and write на этот репозиторий.",false);
+  }
+  return L;
+}
+$("btnGhCheck").onclick=async()=>{
+  const b=$("btnGhCheck"); b.disabled=true;
+  try{ await selfCheckRegistry(); }
+  finally{ b.disabled=false; }
+};
 
 function renderAdmin(){
   const r=loadReg();
@@ -4799,180 +4871,6 @@ $("btnApplyOrder").onclick=()=>{
   }catch(err){ toast("😢 "+err.message,3200); }
 };
 
-/* ===================== 🌐 СОЦИАЛЬНАЯ СЕТЬ: ЛЕНТА В ОБЩЕМ РЕЕСТРЕ =====================
-   Работает ровно по той же схеме, что и аккаунты: своего сервера нет, а все
-   записи лежат в том же файле arena-users.json в репозитории. Страница сама
-   читает файл и сама коммитит новую запись, поэтому ленту видит каждый, кто
-   подключил этот же репозиторий.
-
-   Схема: posts:[{id,by,name,text,at,v}] и likes:[[idЗаписи,idКто],…].
-   Запись и лайк — обычные строки в общем файле, у них есть автор и время.
-   Чужую запись удалить нельзя, свою — можно; админ может убрать любую. */
-const POST_MAX=500;              // символов в записи
-const POST_KEEP=100;             // сколько последних записей живёт в файле
-const POST_COOLDOWN=60000;       // одна запись в минуту
-function normPosts(d){
-  return Array.isArray(d&&d.posts)
-    ? d.posts.filter(p=>p&&p.id&&p.text).map(p=>({
-        id:String(p.id),by:String(p.by||""),name:String(p.name||""),
-        text:String(p.text).slice(0,POST_MAX),at:+p.at||0,v:String(p.v||"verified")}))
-    : [];
-}
-function normLikes(d){
-  return Array.isArray(d&&d.likes)
-    ? d.likes.filter(x=>Array.isArray(x)&&x.length===2).map(x=>[String(x[0]),String(x[1])])
-    : [];
-}
-function postAgo(at){
-  const s=Math.max(0,Math.floor((Date.now()-(+at||Date.now()))/1000));
-  if(s<60) return s+" сек назад";
-  const m=Math.floor(s/60); if(m<60) return m+" мин назад";
-  const h=Math.floor(m/60); if(h<24) return h+" ч назад";
-  const d=Math.floor(h/24); if(d<30) return d+" дн назад";
-  return fmtDate(Math.floor((+at||0)/1000));
-}
-/* одна запись = один коммит в репозиторий */
-async function feedAdd(text){
-  if(!user) throw new Error("Сначала войди в аккаунт 👤");
-  if(isBanned(user.id)) throw new Error("🚫 Забаненным писать нельзя");
-  /* без токена GitHub не принимает коммит — говорим об этом сразу, до чтения файла */
-  if(!ghCanWrite()) throw new Error("Нужен репозиторий с токеном: без записи в реестр публикация не работает 🔑");
-  const t=String(text||"").trim().slice(0,POST_MAX);
-  if(t.length<1) throw new Error("Напиши хоть что-нибудь ✍️");
-  const {data,sha}=await ghRead();
-  const posts=normPosts(data);
-  const mine=posts.filter(p=>normId(p.by)===normId(user.id));
-  if(mine.length){
-    const last=Math.max.apply(null,mine.map(p=>p.at||0));
-    const left=Math.ceil((POST_COOLDOWN-(Date.now()-last))/1000);
-    if(left>0) throw new Error("Следующая запись через "+left+" сек ⏳");
-  }
-  posts.push({id:"p"+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36),
-    by:normId(user.id),name:user.name,text:t,at:Date.now(),v:statusOf(user.id)});
-  data.posts=posts.slice(-POST_KEEP);
-  data.likes=normLikes(data);
-  data.updatedAt=Date.now();
-  await ghWrite(data,sha,"📣 Запись в ленте от "+normId(user.id));
-  return data.posts[data.posts.length-1];
-}
-async function feedLike(postId){
-  if(!user) throw new Error("Сначала войди в аккаунт 👤");
-  if(!ghCanWrite()) throw new Error("Нужен подключённый репозиторий с токеном");
-  const {data,sha}=await ghRead();
-  data.posts=normPosts(data);
-  const likes=normLikes(data);
-  const k=likes.findIndex(x=>x[0]===String(postId)&&x[1]===normId(user.id));
-  if(k>=0) likes.splice(k,1); else likes.push([String(postId),normId(user.id)]);
-  data.likes=likes; data.updatedAt=Date.now();
-  await ghWrite(data,sha,(k>=0?"💔 ":"❤️ ")+(k>=0?"Убран лайк с ":"Лайк ")+String(postId));
-  return k<0;
-}
-async function feedDelete(postId){
-  if(!user) throw new Error("Сначала войди в аккаунт 👤");
-  if(!ghCanWrite()) throw new Error("Нужен подключённый репозиторий с токеном");
-  const {data,sha}=await ghRead();
-  const posts=normPosts(data);
-  const p=posts.find(x=>x.id===String(postId));
-  if(!p) throw new Error("Такой записи уже нет");
-  if(normId(p.by)!==normId(user.id)&&!isAdmin(user.id)) throw new Error("Чужую запись удалить нельзя 🙈");
-  data.posts=posts.filter(x=>x.id!==String(postId));
-  data.likes=normLikes(data).filter(x=>x[0]!==String(postId));
-  data.updatedAt=Date.now();
-  await ghWrite(data,sha,"🗑️ Запись удалена "+String(postId));
-  return true;
-}
-/* чтение ленты: один запрос к репозиторию */
-async function feedLoad(){
-  const {data}=await ghRead();
-  const posts=normPosts(data), likes=normLikes(data);
-  return {posts:posts.slice().sort((a,b)=>(b.at||0)-(a.at||0)),likes};
-}
-function likedBy(likes,id){ return likes.filter(x=>x[0]===String(id)).map(x=>x[1]); }
-/* ---------- отрисовка ---------- */
-function feedSay(el,txt,bad){
-  if(!el) return;
-  el.classList.remove("hidden"); el.className="expchip "+(bad?"fire":"ok"); el.textContent=txt;
-}
-async function renderFeed(){
-  const box=$("feedList"); if(!box) return;
-  paintNetLine();
-  if(!user){ box.innerHTML='<div class="admempty">войди в аккаунт — лента общая для всех своих</div>'; $("feedCount").textContent="0"; return; }
-  if(!ghReady()){
-    box.innerHTML='<div class="admempty">репозиторий не подключён — подключи его в профиле, и появится общая лента</div>';
-    $("feedCount").textContent="0"; return;
-  }
-  box.innerHTML='<div class="admempty">⏳ читаю ленту из репозитория…</div>';
-  try{
-    const f=await feedLoad();
-    $("feedCount").textContent=String(f.posts.length);
-    box.innerHTML="";
-    if(!f.posts.length){ box.innerHTML='<div class="admempty">записей пока нет — будь первым 🎉</div>'; return; }
-    const my=normId(user.id);
-    f.posts.forEach(p=>{
-      const who=likedBy(f.likes,p.id);
-      const d=document.createElement("div"); d.className="postrow";
-      const nm=p.name||("ID "+fmtId(p.by));
-      const head=document.createElement("div"); head.className="posthead";
-      head.innerHTML='<span class="ava2">'+escapeHtml((nm[0]||"?").toUpperCase())+'</span>'+
-        '<span><span class="pnm">'+escapeHtml(nm)+
-        (p.v==="verified"?' <span style="color:#22d3ee">✔</span>':'')+
-        (normId(p.by)===my?' <span style="color:var(--muted)">· это ты</span>':'')+'</span>'+
-        '<br><span class="pid">'+escapeHtml(fmtId(p.by))+'</span></span>'+
-        '<span class="ptime">'+postAgo(p.at)+'</span>';
-      d.appendChild(head);
-      const t=document.createElement("div"); t.className="posttxt"; t.textContent=p.text;
-      d.appendChild(t);
-      const bar=document.createElement("div"); bar.className="postbar";
-      const lb=document.createElement("button");
-      const on=who.indexOf(my)>=0;
-      lb.className="likebtn"+(on?" on":"");
-      lb.textContent=(on?"❤️ ":"🤍 ")+who.length;
-      lb.onclick=async()=>{
-        try{ await feedLike(p.id); await renderFeed(); }
-        catch(e){ feedSay($("feedHint"),"😢 "+e.message,true); }
-      };
-      bar.appendChild(lb);
-      const cnt=document.createElement("small");
-      cnt.textContent=who.length===1?"нравится одному":"нравится: "+who.length;
-      bar.appendChild(cnt);
-      if(normId(p.by)===my||isAdmin(user.id)){
-        const del=document.createElement("button"); del.className="del"; del.textContent="удалить";
-        del.onclick=async()=>{
-          if(!confirm("Удалить запись?")) return;
-          try{ await feedDelete(p.id); toast("🗑️ Запись удалена"); await renderFeed(); }
-          catch(e){ feedSay($("feedHint"),"😢 "+e.message,true); }
-        };
-        bar.appendChild(del);
-      }
-      d.appendChild(bar);
-      box.appendChild(d);
-    });
-    if(!ghCanWrite()){
-      const w=document.createElement("div"); w.className="admempty";
-      w.textContent="✍️ Лента открыта для чтения. Чтобы писать и ставить лайки, подключи репозиторий с токеном в профиле 🔑";
-      box.appendChild(w);
-    }
-  }catch(e){
-    box.innerHTML='<div class="admempty">не удалось прочитать ленту: '+e.message+'</div>';
-  }
-}
-$("postText").oninput=()=>{
-  const v=$("postText").value;
-  $("postCount").textContent=v.length+" / "+POST_MAX;
-};
-$("btnPost").onclick=async()=>{
-  const btn=$("btnPost"); btn.disabled=true;
-  try{
-    const p=await feedAdd($("postText").value);
-    $("postText").value=""; $("postCount").textContent="0 / "+POST_MAX;
-    feedSay($("feedHint"),"✅ Запись опубликована — она в общем файле, её видят все подключённые");
-    toast("📣 Опубликовано");
-    await renderFeed();
-  }catch(e){ feedSay($("feedHint"),"😢 "+e.message,true); }
-  finally{ btn.disabled=false; }
-};
-$("btnFeedRefresh").onclick=()=>{ $("feedHint").classList.add("hidden"); renderFeed(); };
-
 /* ================= БАН: что он делает ================= */
 function checkBanState(){
   if(!user) return;
@@ -4988,10 +4886,22 @@ function refreshCreateButtons(){ if(user) $("btnEncrypt").disabled=isBanned(user
 
 /* ================= СТАРТ ================= */
 loadUser();
+/* Если страница открыта с GitHub Pages, владелец и репозиторий видны прямо в
+   адресе — подключаем реестр сразу, без ручного ввода. Иначе страница считает,
+   что репозиторий не подключён, и заводит локальный аккаунт вместо общего. */
+function autoConnectRegistry(){
+  if(ghCfg().owner&&ghCfg().repo) return false;
+  const g=guessFromHost();
+  if(!g) return false;
+  localStorage.setItem("ac_gh_owner",g.owner);
+  localStorage.setItem("ac_gh_repo",g.repo);
+  return true;
+}
+autoConnectRegistry();
 paintNetLine(); fillGhForm();   // показать состояние реестра и подставить настройки
 if(user&&user.id&&user.name) enterApp();
 else showScreen("reg");
 </script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","spa":2}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3c7378f1f697d90',t:'MTc4OTYzODczNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3c7a0b5f843aa14',t:'MTc4OTY0MzA0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
