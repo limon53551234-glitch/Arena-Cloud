@@ -1,12 +1,18 @@
 {
   "version": 1,
-  "updatedAt": 1789660857577,
+  "updatedAt": 1789661041534,
   "users": [
     {
       "id": "Admin1214",
       "name": "GG",
       "pw": "",
       "at": 1789660857577
+    },
+    {
+      "id": "421753204320",
+      "name": "Limonad042",
+      "pw": "45961da770ae6d14ea418d42acac0140e9ad02d3c4c1cdf515425dafa59a9793",
+      "at": 1789661041534
     }
   ],
   "bans": [],
