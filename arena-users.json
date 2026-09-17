@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1789640172760,
+  "updatedAt": 1789640225807,
   "users": [],
   "bans": [],
   "verified": [],
@@ -14,6 +14,11 @@
       "v": "unverified"
     }
   ],
-  "likes": [],
+  "likes": [
+    [
+      "pmu5djv134kg",
+      "255268844695"
+    ]
+  ],
   "guard": []
 }
