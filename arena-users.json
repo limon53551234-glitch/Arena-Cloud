@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": 1789661120978,
+  "updatedAt": 1789661573157,
   "users": [
     {
       "id": "Admin1214",
@@ -13,6 +13,12 @@
       "name": "Limonad042",
       "pw": "45961da770ae6d14ea418d42acac0140e9ad02d3c4c1cdf515425dafa59a9793",
       "at": 1789661041534
+    },
+    {
+      "id": "865347077965",
+      "name": "DRoP",
+      "pw": "db7b5eacfcfcfe77d24726111326d7c3efda11e3600409558e9740fdd2d62646",
+      "at": 1789661573157
     }
   ],
   "bans": [],
